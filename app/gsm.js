@@ -37,7 +37,7 @@ module.exports = {
             serialPort.write('"AT+CMGL=\"REC UNREAD\"\r\n');// Отправляем запрос чтения непрочитанных
             await sleep(800);
 
- mysql_gsm.selectTelefon(); 
+
             serialPort.on('data', async function (data) {
 
                 await sleep(800);
@@ -55,12 +55,19 @@ module.exports = {
 
                 if (result.length > 0) {
                     serialPort.write('ATH0\r\n');// разрываем связь 
-                    if (result[0] == 'telefon') {
-                        console.log("--- Search: " + result[0]);
-                        await sleep(2000);
-                       
-                        serialPort.write("ATDtelefon;\r\n");//звоним
+                    let result = mysql_gsm.selectTelefon();
+
+                    for (let value in result) {
+                        console.log(result[value].telefon);
+                        if (result[0] == result[value].telefon) {
+                            console.log("--- Search: " + result[0]);
+                            console.log("--- Telefon: " + result[value].telefon);
+                           // await sleep(2000);
+                            serialPort.write('"' + result[value].telefon + ';\r\n"');//звоним
+
+                        }
                     }
+
                 }
 
                 //------------------

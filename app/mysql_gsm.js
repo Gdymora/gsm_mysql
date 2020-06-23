@@ -17,12 +17,13 @@ module.exports = {
             //Select all customers and return the result object:
             connection.query("SELECT * FROM telefon", function (err, result, fields) {
                 if (err) throw err;
-                for (let value in result) {
+                return result;
+               /*  for (let value in result) {
                     console.log(result[value].telefon);
-                }
+                } */
             });
         });
 
-        connection.end();
+        //connection.end();
     }
 }
